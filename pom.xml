@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.mizhousoft</groupId>
+		<artifactId>mizhousoft-bom</artifactId>
+		<version>2.0.1</version>
+	</parent>
+
+	<groupId>com.mizhousoft.security</groupId>
+	<artifactId>security-framework</artifactId>
+	<version>1.0.0</version>
+	<packaging>pom</packaging>
+	<name>security-framework</name>
+	<description>Security Framework</description>
+
+	<properties>
+		<commons.version>2.0.1</commons.version>
+		<security.version>1.0.0</security.version>
+	</properties>
+
+	<modules>
+		<module>security-context</module>
+		<module>session-jdbc-operation</module>
+		<module>security-authentication</module>
+		<module>security-spring-boot-starter</module>
+	</modules>
+
+</project>

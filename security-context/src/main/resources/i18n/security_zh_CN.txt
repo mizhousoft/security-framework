@@ -1,0 +1,8 @@
+# Security
+security.authentication.access.deny=你没有权限访问
+security.authentication.login.failed=登录失败
+security.authentication.login.first=请先登录
+security.authentication.account.locked.m.error=帐号登录受限，请{0}分钟后再次登录
+security.authentication.account.locked.s.error=帐号登录受限，请{0}秒后再次登录
+security.authentication.account.locked.error=帐号登录受限
+security.authentication.ip.locked.error=帐号登录受限
