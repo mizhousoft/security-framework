@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -15,6 +14,7 @@ import org.springframework.session.web.http.DefaultCookieSerializer;
 import org.springframework.session.web.http.HeaderHttpSessionIdResolver;
 import org.springframework.session.web.http.HttpSessionIdResolver;
 
+import com.mizhousoft.commons.lang.CollectionUtils;
 import com.mizhousoft.security.filter.SecurityContextPersistenceFilter;
 import com.mizhousoft.security.filter.authc.AccountPasswordAuthcFilter;
 import com.mizhousoft.security.filter.authc.AppleAuthcFilter;

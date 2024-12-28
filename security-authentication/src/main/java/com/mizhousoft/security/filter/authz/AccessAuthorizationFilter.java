@@ -3,10 +3,10 @@ package com.mizhousoft.security.filter.authz;
 import java.io.IOException;
 import java.util.Set;
 
-import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mizhousoft.commons.lang.CollectionUtils;
 import com.mizhousoft.commons.web.util.WebUtils;
 import com.mizhousoft.security.Authentication;
 import com.mizhousoft.security.context.SecurityContextHolder;
