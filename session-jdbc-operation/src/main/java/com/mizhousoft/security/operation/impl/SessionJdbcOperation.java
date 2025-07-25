@@ -12,11 +12,11 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.session.FindByIndexNameSessionRepository;
 import org.springframework.session.Session;
+import org.springframework.session.jdbc.JdbcIndexedSessionRepository;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import com.mizhousoft.security.operation.SessionOperation;
-import com.mizhousoft.security.operation.jdbc.JdbcIndexedSessionRepository;
 
 /**
  * Session操作
