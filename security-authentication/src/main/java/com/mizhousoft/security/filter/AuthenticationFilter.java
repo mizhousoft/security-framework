@@ -160,7 +160,13 @@ public abstract class AuthenticationFilter extends AccessControlFilter
 		if (null != accountDetails.getCsrfToken())
 		{
 			String path = WebUtils.getContextPath(request);
-			String cookie = CookieBuilder.build(SecurityConstants.COOKIE_CSRF_TOKEN, accountDetails.getCsrfToken(), null, path, true, false);
+			if (StringUtils.isBlank(path))
+			{
+				path = "/";
+			}
+
+			String cookie = CookieBuilder.build(SecurityConstants.COOKIE_CSRF_TOKEN, accountDetails.getCsrfToken(), null, path, true,
+			        false);
 			response.addHeader(SecurityConstants.HEADER_SET_COOKIE, cookie);
 		}
 	}
