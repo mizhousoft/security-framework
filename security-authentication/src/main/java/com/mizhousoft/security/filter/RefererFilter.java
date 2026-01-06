@@ -2,6 +2,7 @@ package com.mizhousoft.security.filter;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.util.Collections;
 import java.util.Set;
@@ -50,6 +51,13 @@ public class RefererFilter extends AccessControlFilter
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 	        throws ServletException, IOException
 	{
+		if (isRequestExcluded(request))
+		{
+			filterChain.doFilter(request, response);
+
+			return;
+		}
+
 		String referer = request.getHeader(SecurityConstants.HEADER_REFERER);
 		if (isRefererAllow(referer))
 		{
@@ -71,7 +79,7 @@ public class RefererFilter extends AccessControlFilter
 
 		try
 		{
-			URL url = new java.net.URL(referer);
+			URL url = URI.create(referer).toURL();
 			String host = url.getHost();
 
 			if (!supportReferers.contains(host))

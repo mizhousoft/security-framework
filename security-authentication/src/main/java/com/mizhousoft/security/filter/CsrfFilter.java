@@ -1,10 +1,12 @@
 package com.mizhousoft.security.filter;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mizhousoft.commons.lang.CharEncoding;
 import com.mizhousoft.commons.web.util.WebUtils;
 import com.mizhousoft.security.AccountDetails;
 import com.mizhousoft.security.Authentication;
@@ -31,8 +33,7 @@ public class CsrfFilter extends AccessControlFilter
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 	        throws ServletException, IOException
 	{
-		String requestPath = WebUtils.getPathWithinApplication(request);
-		if (excludePaths.contains(requestPath))
+		if (isRequestExcluded(request))
 		{
 			filterChain.doFilter(request, response);
 
@@ -57,7 +58,10 @@ public class CsrfFilter extends AccessControlFilter
 		}
 		else
 		{
-			LOG.error("Request csrf token is invalid.");
+			String requestPath = WebUtils.getPathWithinApplication(request);
+			requestPath = URLEncoder.encode(requestPath, CharEncoding.UTF8);
+
+			LOG.error("Request csrf token is invalid, path is {}.", requestPath);
 
 			redirectToLogin(request, response);
 		}

@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.session.FindByIndexNameSessionRepository;
 
-import com.mizhousoft.commons.web.util.WebUtils;
 import com.mizhousoft.security.AccountDetails;
 import com.mizhousoft.security.SecurityConstants;
 import com.mizhousoft.security.context.SecurityContext;
@@ -40,8 +39,7 @@ public class SecurityContextPersistenceFilter extends AccessControlFilter
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 	        throws ServletException, IOException
 	{
-		String requestPath = WebUtils.getPathWithinApplication(request);
-		if (excludePaths.contains(requestPath))
+		if (isRequestExcluded(request))
 		{
 			filterChain.doFilter(request, response);
 

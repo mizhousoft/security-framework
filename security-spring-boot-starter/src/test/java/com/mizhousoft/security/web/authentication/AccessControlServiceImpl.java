@@ -57,7 +57,18 @@ public class AccessControlServiceImpl implements AccessControlService
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Set<String> queryStaticRequestPaths()
+	public Set<String> queryStaticExactPaths()
+	{
+		Set<String> paths = new HashSet<>(10);
+
+		return paths;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Set<String> queryStaticPatternPaths()
 	{
 		Set<String> paths = new HashSet<>(10);
 

@@ -1,7 +1,7 @@
 package com.mizhousoft.security.config;
 
-import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +13,7 @@ import org.springframework.session.web.http.CookieHttpSessionIdResolver;
 import org.springframework.session.web.http.DefaultCookieSerializer;
 import org.springframework.session.web.http.HeaderHttpSessionIdResolver;
 import org.springframework.session.web.http.HttpSessionIdResolver;
+import org.springframework.web.util.pattern.PathPattern;
 
 import com.mizhousoft.commons.lang.CollectionUtils;
 import com.mizhousoft.security.filter.SecurityContextPersistenceFilter;
@@ -37,6 +38,7 @@ import com.mizhousoft.security.service.VerificationCodeAuthcService;
 import com.mizhousoft.security.service.WeixinMPAuthcService;
 import com.mizhousoft.security.service.WeixinMiniAuthcService;
 import com.mizhousoft.security.service.WeixinOpenAuthcService;
+import com.mizhousoft.security.util.SecurityUtils;
 
 import jakarta.servlet.Filter;
 
@@ -86,13 +88,11 @@ public class HttpSessionConfig
 		Set<String> authzPaths = accessControlService.queryAuthzRequestPaths();
 		if (authzPaths.isEmpty())
 		{
-			// 增加一个临时的假路径，防止Filter拦截所有请求
-			authzPaths.add("/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+			throw new RuntimeException("Authz request paths is empty.");
 		}
 
 		AccessAuthorizationFilter filter = new AccessAuthorizationFilter();
 		filter.setAccessControlService(accessControlService);
-		filter.setExcludePaths(Collections.emptySet());
 		filter.setLoginUrl(securityProperties.getLoginUrl());
 		filter.setUnauthorizedUrl(securityProperties.getUnauthorizedUrl());
 
@@ -125,18 +125,22 @@ public class HttpSessionConfig
 	public FilterRegistrationBean<Filter> getSecurityContextPersistenceFilter(AccessControlService accessControlService)
 	{
 		Set<String> anonPaths = accessControlService.queryAnonRequestPaths();
-		Set<String> staticPaths = accessControlService.queryStaticRequestPaths();
+		Set<String> staticExactPaths = accessControlService.queryStaticExactPaths();
 
-		Set<String> excludePaths = new HashSet<>(staticPaths);
-		excludePaths.addAll(anonPaths);
+		Set<String> excludeExactPaths = new HashSet<>(anonPaths);
+		excludeExactPaths.addAll(staticExactPaths);
 
-		CollectionUtils.addIgnoreNull(excludePaths, securityProperties.getLoginUrl());
-		CollectionUtils.addIgnoreNull(excludePaths, securityProperties.getUnauthorizedUrl());
+		Set<String> staticPatternPaths = accessControlService.queryStaticPatternPaths();
+		List<PathPattern> excludedPatterns = SecurityUtils.convertPathPattern(staticPatternPaths);
+
+		CollectionUtils.addIgnoreNull(excludeExactPaths, securityProperties.getLoginUrl());
+		CollectionUtils.addIgnoreNull(excludeExactPaths, securityProperties.getUnauthorizedUrl());
 
 		SecurityContextPersistenceFilter filter = new SecurityContextPersistenceFilter();
 		filter.setPrincipalNameProvider(principalNameProvider);
 		filter.setLoginUrl(securityProperties.getLoginUrl());
-		filter.setExcludePaths(excludePaths);
+		filter.setExcludeExactPaths(excludeExactPaths);
+		filter.setExcludedPatterns(excludedPatterns);
 
 		FilterRegistrationBean<Filter> registration = new FilterRegistrationBean<Filter>();
 		registration.setFilter(filter);

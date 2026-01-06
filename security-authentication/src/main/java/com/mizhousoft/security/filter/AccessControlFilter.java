@@ -1,12 +1,15 @@
 package com.mizhousoft.security.filter;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
+import org.springframework.http.server.PathContainer;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.util.pattern.PathPattern;
 
 import com.mizhousoft.commons.web.util.CookieUtils;
 import com.mizhousoft.commons.web.util.WebUtils;
@@ -28,14 +31,44 @@ public abstract class AccessControlFilter extends OncePerRequestFilter
 
 	private static final String GET_METHOD = "get";
 
-	// 登录URL
+	/**
+	 * 登录URL
+	 */
 	private String loginUrl;
 
-	// 未授权URL
+	/**
+	 * 未授权URL
+	 */
 	private String unauthorizedUrl;
 
-	// 排除的路径
-	protected Set<String> excludePaths = Collections.emptySet();
+	/**
+	 * 排除的路径
+	 */
+	private Set<String> excludeExactPaths = Collections.emptySet();
+
+	/**
+	 * 要排除的路径匹配表达式
+	 */
+	private List<PathPattern> excludedPatterns = Collections.emptyList();
+
+	/**
+	 * 是否请求排除
+	 * 
+	 * @param requestPath
+	 * @return
+	 */
+	protected boolean isRequestExcluded(HttpServletRequest request)
+	{
+		String requestPath = WebUtils.getPathWithinApplication(request);
+
+		if (excludeExactPaths.contains(requestPath)
+		        || excludedPatterns.stream().anyMatch(pattern -> pattern.matches(PathContainer.parsePath(requestPath))))
+		{
+			return true;
+		}
+
+		return false;
+	}
 
 	/**
 	 * 是否JSON请求
@@ -169,6 +202,13 @@ public abstract class AccessControlFilter extends OncePerRequestFilter
 		}
 	}
 
+	/**
+	 * 构建Location URL
+	 * 
+	 * @param request
+	 * @param url
+	 * @return
+	 */
 	protected String buildLocationUrl(HttpServletRequest request, String url)
 	{
 		if (null == url)
@@ -191,9 +231,16 @@ public abstract class AccessControlFilter extends OncePerRequestFilter
 		return targetUrl.toString();
 	}
 
+	/**
+	 * 是否GET请求
+	 * 
+	 * @param request
+	 * @return
+	 */
 	protected boolean isGetMethod(HttpServletRequest request)
 	{
 		String httpMethod = request.getMethod();
+
 		return (GET_METHOD.equalsIgnoreCase(httpMethod));
 	}
 
@@ -238,12 +285,22 @@ public abstract class AccessControlFilter extends OncePerRequestFilter
 	}
 
 	/**
-	 * 设置excludePaths
+	 * 设置excludeExactPaths
 	 * 
-	 * @param excludePaths
+	 * @param excludeExactPaths
 	 */
-	public void setExcludePaths(Set<String> excludePaths)
+	public void setExcludeExactPaths(Set<String> excludeExactPaths)
 	{
-		this.excludePaths = excludePaths;
+		this.excludeExactPaths = excludeExactPaths;
+	}
+
+	/**
+	 * 设置excludedPatterns
+	 * 
+	 * @param excludedPatterns
+	 */
+	public void setExcludedPatterns(List<PathPattern> excludedPatterns)
+	{
+		this.excludedPatterns = excludedPatterns;
 	}
 }

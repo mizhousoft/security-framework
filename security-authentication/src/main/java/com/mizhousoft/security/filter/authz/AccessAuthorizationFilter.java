@@ -27,6 +27,9 @@ public class AccessAuthorizationFilter extends AccessControlFilter
 {
 	private static final Logger LOG = LoggerFactory.getLogger(AccessAuthorizationFilter.class);
 
+	/**
+	 * 访问控制服务
+	 */
 	private AccessControlService accessControlService;
 
 	/**
@@ -40,12 +43,6 @@ public class AccessAuthorizationFilter extends AccessControlFilter
 
 		try
 		{
-			if (excludePaths.contains(requestPath))
-			{
-				filterChain.doFilter(request, response);
-				return;
-			}
-
 			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 			if (null == authentication)
 			{

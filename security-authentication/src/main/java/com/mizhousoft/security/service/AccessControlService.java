@@ -31,11 +31,18 @@ public interface AccessControlService
 	Set<String> queryAnonRequestPaths();
 
 	/**
-	 * 获取静态请求路径
+	 * 获取静态精确路径
 	 * 
 	 * @return
 	 */
-	Set<String> queryStaticRequestPaths();
+	Set<String> queryStaticExactPaths();
+
+	/**
+	 * 获取静态表达式路径
+	 * 
+	 * @return
+	 */
+	Set<String> queryStaticPatternPaths();
 
 	/**
 	 * 根据请求路径获取角色
