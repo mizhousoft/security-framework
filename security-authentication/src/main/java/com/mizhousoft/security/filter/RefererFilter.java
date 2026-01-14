@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.Collections;
 import java.util.Set;
 
@@ -13,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mizhousoft.commons.lang.CharEncoding;
+import com.mizhousoft.commons.web.util.WebUtils;
 import com.mizhousoft.security.SecurityConstants;
 
 import jakarta.servlet.FilterChain;
@@ -59,7 +61,7 @@ public class RefererFilter extends AccessControlFilter
 		}
 
 		String referer = request.getHeader(SecurityConstants.HEADER_REFERER);
-		if (isRefererAllow(referer))
+		if (isRefererAllow(request, referer))
 		{
 			filterChain.doFilter(request, response);
 		}
@@ -69,11 +71,14 @@ public class RefererFilter extends AccessControlFilter
 		}
 	}
 
-	private boolean isRefererAllow(String referer)
+	private boolean isRefererAllow(HttpServletRequest request, String referer)
 	{
 		if (null == referer)
 		{
-			LOG.error("Referer is null.");
+			String requestPath = WebUtils.getPathWithinApplication(request);
+			requestPath = URLEncoder.encode(requestPath, CharEncoding.UTF8);
+
+			LOG.error("Referer is invalid, path is {}.", requestPath);
 			return false;
 		}
 
