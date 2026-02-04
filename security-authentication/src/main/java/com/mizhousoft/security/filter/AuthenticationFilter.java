@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.session.FindByIndexNameSessionRepository;
+import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 import com.mizhousoft.commons.json.JSONException;
 import com.mizhousoft.commons.json.JSONUtils;
@@ -148,9 +149,16 @@ public abstract class AuthenticationFilter extends AccessControlFilter
 	{
 		LOG.debug("Account login successfully, id is {}, name is {}.", accountDetails.getAccountId(), accountDetails.getAccountName());
 
+		Object locale = request.getSession().getAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME);
+
 		destroySession(request, response, true);
 
 		HttpSession session = request.getSession(true);
+
+		if (null != locale)
+		{
+			session.setAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME, locale);
+		}
 
 		session.setAttribute(SecurityConstants.ACCOUNT_SESSION, accountDetails);
 
