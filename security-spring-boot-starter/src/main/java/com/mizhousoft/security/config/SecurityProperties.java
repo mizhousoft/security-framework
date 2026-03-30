@@ -90,6 +90,11 @@ public class SecurityProperties
 	private String referers;
 
 	/**
+	 * 登录失败限制配置（IP 维度最大失败次数）
+	 */
+	private int ipFailureLimit = 30;
+
+	/**
 	 * 获取mode
 	 * 
 	 * @return
@@ -347,5 +352,23 @@ public class SecurityProperties
 	public void setReferers(String referers)
 	{
 		this.referers = referers;
+	}
+
+	/**
+	 * 获取ipFailureLimit
+	 * @return
+	 */
+	public int getIpFailureLimit()
+	{
+		return ipFailureLimit;
+	}
+
+	/**
+	 * 设置ipFailureLimit
+	 * @param ipFailureLimit
+	 */
+	public void setIpFailureLimit(int ipFailureLimit)
+	{
+		this.ipFailureLimit = ipFailureLimit;
 	}
 }

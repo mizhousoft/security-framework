@@ -206,7 +206,8 @@ public abstract class AuthenticationFilter extends AccessControlFilter
 		try
 		{
 			response.setStatus(HttpServletResponse.SC_OK);
-			response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+			response.setContentType(MediaType.APPLICATION_JSON_VALUE + ";charset=UTF-8");
+			response.setCharacterEncoding("UTF-8");
 
 			String respBody = ResponseBuilder.buildAuthcFailed(error, code);
 			response.getWriter().write(respBody);

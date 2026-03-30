@@ -126,7 +126,8 @@ public abstract class AccessControlFilter extends OncePerRequestFilter
 			if (isJSONRequest(request))
 			{
 				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-				response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+				response.setContentType(MediaType.APPLICATION_JSON_VALUE + ";charset=UTF-8");
+				response.setCharacterEncoding("UTF-8");
 
 				String respBody = ResponseBuilder.buildUnauthorized(location);
 				response.getWriter().write(respBody);
@@ -162,7 +163,8 @@ public abstract class AccessControlFilter extends OncePerRequestFilter
 			if (isJSONRequest(request))
 			{
 				response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-				response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+				response.setContentType(MediaType.APPLICATION_JSON_VALUE + ";charset=UTF-8");
+				response.setCharacterEncoding("UTF-8");
 
 				String respBody = ResponseBuilder.buildForbidden();
 				response.getWriter().write(respBody);

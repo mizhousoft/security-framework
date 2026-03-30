@@ -26,8 +26,8 @@ import com.mizhousoft.security.filter.authc.WeixinMPAuthcFilter;
 import com.mizhousoft.security.filter.authc.WeixinMiniAuthcFilter;
 import com.mizhousoft.security.filter.authc.WeixinOpenAuthcFilter;
 import com.mizhousoft.security.filter.authz.AccessAuthorizationFilter;
-import com.mizhousoft.security.limiter.AuthFailureLimiter;
 import com.mizhousoft.security.limiter.impl.IPAddrAuthFailureLimiter;
+import com.mizhousoft.security.notifier.AuthFailureNotifier;
 import com.mizhousoft.security.provider.DefaultPrincipalNameProvider;
 import com.mizhousoft.security.service.AccessControlService;
 import com.mizhousoft.security.service.AccountPasswordAuthcService;
@@ -56,7 +56,18 @@ public class HttpSessionConfig
 	@Autowired(required = false)
 	private PrincipalNameProvider principalNameProvider = new DefaultPrincipalNameProvider();
 
-	private AuthFailureLimiter ipAddrFailureLimiter = new IPAddrAuthFailureLimiter(30);
+	@Autowired(required = false)
+	private AuthFailureNotifier authFailureNotifier;
+
+	@Bean
+	public IPAddrAuthFailureLimiter getIPAddrAuthFailureLimiter()
+	{
+		int limitNumber = securityProperties.getIpFailureLimit();
+
+		IPAddrAuthFailureLimiter ipAddrFailureLimiter = new IPAddrAuthFailureLimiter(limitNumber, authFailureNotifier);
+
+		return ipAddrFailureLimiter;
+	}
 
 	@Bean
 	public HttpSessionIdResolver httpSessionIdResolver()
@@ -153,7 +164,8 @@ public class HttpSessionConfig
 
 	@Bean
 	@ConditionalOnBean(AccountPasswordAuthcService.class)
-	public FilterRegistrationBean<Filter> getAccountPasswordAuthenticationFilter(AccountPasswordAuthcService accountAuthcService)
+	public FilterRegistrationBean<Filter> getAccountPasswordAuthenticationFilter(AccountPasswordAuthcService accountAuthcService,
+	        IPAddrAuthFailureLimiter ipAddrFailureLimiter)
 	{
 		AccountPasswordAuthcFilter filter = new AccountPasswordAuthcFilter();
 		filter.setAccountAuthcService(accountAuthcService);
@@ -172,7 +184,8 @@ public class HttpSessionConfig
 
 	@Bean
 	@ConditionalOnBean(VerificationCodeAuthcService.class)
-	public FilterRegistrationBean<Filter> getVerificationCodeAuthcFilter(VerificationCodeAuthcService verificationCodeAuthcService)
+	public FilterRegistrationBean<Filter> getVerificationCodeAuthcFilter(VerificationCodeAuthcService verificationCodeAuthcService,
+	        IPAddrAuthFailureLimiter ipAddrFailureLimiter)
 	{
 		VerificationCodeAuthcFilter filter = new VerificationCodeAuthcFilter();
 		filter.setVerificationCodeAuthcService(verificationCodeAuthcService);
@@ -191,7 +204,8 @@ public class HttpSessionConfig
 
 	@Bean
 	@ConditionalOnBean(WeixinMPAuthcService.class)
-	public FilterRegistrationBean<Filter> getWeixinMPAuthcFilter(WeixinMPAuthcService weixinMPAuthcService)
+	public FilterRegistrationBean<Filter> getWeixinMPAuthcFilter(WeixinMPAuthcService weixinMPAuthcService,
+	        IPAddrAuthFailureLimiter ipAddrFailureLimiter)
 	{
 		WeixinMPAuthcFilter filter = new WeixinMPAuthcFilter();
 		filter.setWeixinMPAuthcService(weixinMPAuthcService);
@@ -210,7 +224,8 @@ public class HttpSessionConfig
 
 	@Bean
 	@ConditionalOnBean(WeixinMiniAuthcService.class)
-	public FilterRegistrationBean<Filter> getWeixinMiniAuthcFilter(WeixinMiniAuthcService weixinMiniAuthcService)
+	public FilterRegistrationBean<Filter> getWeixinMiniAuthcFilter(WeixinMiniAuthcService weixinMiniAuthcService,
+	        IPAddrAuthFailureLimiter ipAddrFailureLimiter)
 	{
 		WeixinMiniAuthcFilter filter = new WeixinMiniAuthcFilter();
 		filter.setWeixinMiniAuthcService(weixinMiniAuthcService);
@@ -229,7 +244,8 @@ public class HttpSessionConfig
 
 	@Bean
 	@ConditionalOnBean(WeixinOpenAuthcService.class)
-	public FilterRegistrationBean<Filter> getWeixinOpenAuthcFilter(WeixinOpenAuthcService weixinOpenAuthcService)
+	public FilterRegistrationBean<Filter> getWeixinOpenAuthcFilter(WeixinOpenAuthcService weixinOpenAuthcService,
+	        IPAddrAuthFailureLimiter ipAddrFailureLimiter)
 	{
 		WeixinOpenAuthcFilter filter = new WeixinOpenAuthcFilter();
 		filter.setWeixinOpenAuthcService(weixinOpenAuthcService);
@@ -248,7 +264,8 @@ public class HttpSessionConfig
 
 	@Bean
 	@ConditionalOnBean(AppleAuthcService.class)
-	public FilterRegistrationBean<Filter> getAppleAuthcFilter(AppleAuthcService appleAuthcService)
+	public FilterRegistrationBean<Filter> getAppleAuthcFilter(AppleAuthcService appleAuthcService,
+	        IPAddrAuthFailureLimiter ipAddrFailureLimiter)
 	{
 		AppleAuthcFilter filter = new AppleAuthcFilter();
 		filter.setAppleAuthcService(appleAuthcService);
@@ -267,7 +284,8 @@ public class HttpSessionConfig
 
 	@Bean
 	@ConditionalOnBean(ByteDanceMiniAuthcService.class)
-	public FilterRegistrationBean<Filter> getByteDanceMiniAuthcFilter(ByteDanceMiniAuthcService byteDanceMiniAuthcService)
+	public FilterRegistrationBean<Filter> getByteDanceMiniAuthcFilter(ByteDanceMiniAuthcService byteDanceMiniAuthcService,
+	        IPAddrAuthFailureLimiter ipAddrFailureLimiter)
 	{
 		ByteDanceMiniAuthcFilter filter = new ByteDanceMiniAuthcFilter();
 		filter.setByteDanceMiniAuthcService(byteDanceMiniAuthcService);
