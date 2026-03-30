@@ -56,7 +56,7 @@ public abstract class AuthenticationFilter extends AccessControlFilter
 			if (isGetMethod(request))
 			{
 				loginFailure(request, response,
-				        new BadCredentialsException("security.authentication.login.failed", "Request method is get."));
+				        new BadCredentialsException("intl.security.authentication.login.failed", "Request method is get."));
 				return;
 			}
 
@@ -98,7 +98,7 @@ public abstract class AuthenticationFilter extends AccessControlFilter
 		{
 			LOG.error("Account authenticate failed.", e);
 
-			throw new UnknownAccountException("security.authentication.login.failed", e.getMessage(), e);
+			throw new UnknownAccountException("intl.security.authentication.login.failed", e.getMessage(), e);
 		}
 	}
 
@@ -112,14 +112,14 @@ public abstract class AuthenticationFilter extends AccessControlFilter
 		{
 			if (!isJSONRequest(request))
 			{
-				throw new UnknownAccountException("security.authentication.login.failed",
+				throw new UnknownAccountException("intl.security.authentication.login.failed",
 				        "Request header accept does not application/json.");
 			}
 
 			String requestBody = com.mizhousoft.commons.web.util.WebUtils.getRequestBody(request);
 			if (StringUtils.isBlank(requestBody))
 			{
-				throw new UnknownAccountException("security.authentication.login.failed", "Request body is null.");
+				throw new UnknownAccountException("intl.security.authentication.login.failed", "Request body is null.");
 			}
 
 			T token = JSONUtils.parse(requestBody, clazz);
@@ -130,7 +130,8 @@ public abstract class AuthenticationFilter extends AccessControlFilter
 		}
 		catch (IOException | JSONException e)
 		{
-			throw new UnknownAccountException("security.authentication.login.failed", "Parse request body to AuthenticationToken failed.");
+			throw new UnknownAccountException("intl.security.authentication.login.failed",
+			        "Parse request body to AuthenticationToken failed.");
 		}
 		catch (AssertionException e)
 		{

@@ -47,8 +47,8 @@ public class ByteDanceMiniToken extends AuthenticationToken implements Validator
 	@Override
 	public void validate() throws AssertionException
 	{
-		Assert.notNull("code", code, "security.authentication.login.failed");
-		Assert.size("code", code, 1, 200, "security.authentication.login.failed");
+		Assert.notNull("code", code, "intl.security.authentication.login.failed");
+		Assert.size("code", code, 1, 200, "intl.security.authentication.login.failed");
 	}
 
 	/**

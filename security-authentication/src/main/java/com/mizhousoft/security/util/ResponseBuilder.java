@@ -66,7 +66,7 @@ public abstract class ResponseBuilder
 	{
 		if (StringUtils.isBlank(error))
 		{
-			error = I18nUtils.getMessage("security.authentication.login.failed");
+			error = I18nUtils.getMessage("intl.security.authentication.login.failed");
 		}
 
 		ActionResponse response = ActionRespBuilder.buildFailedResp(error, errorCode);
@@ -77,7 +77,7 @@ public abstract class ResponseBuilder
 
 	public static String buildForbidden() throws JSONException
 	{
-		String error = I18nUtils.getMessage("security.authentication.access.deny");
+		String error = I18nUtils.getMessage("intl.security.authentication.access.deny");
 
 		ActionResponse response = ActionRespBuilder.buildFailedResp(error);
 		String result = JSONUtils.toJSONString(response);
@@ -92,7 +92,7 @@ public abstract class ResponseBuilder
 
 	public static String buildUnauthorized(String location) throws JSONException
 	{
-		String error = I18nUtils.getMessage("security.authentication.login.first");
+		String error = I18nUtils.getMessage("intl.security.authentication.login.first");
 
 		return buildFailed(error, location);
 	}

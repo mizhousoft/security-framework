@@ -34,8 +34,8 @@ public class WeixinOpenToken extends AuthenticationToken
 	{
 		super.validate();
 
-		Assert.notNull("code", code, "security.authentication.login.failed");
-		Assert.size("code", code, 1, 64, "security.authentication.login.failed");
+		Assert.notNull("code", code, "intl.security.authentication.login.failed");
+		Assert.size("code", code, 1, 64, "intl.security.authentication.login.failed");
 	}
 
 	/**

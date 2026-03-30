@@ -33,7 +33,7 @@ public class AccountAuthFailureLimiter extends AbstractAuthFailureLimiter
 			int value = faildCounter.getFailedCount();
 			if (value >= limitNumber)
 			{
-				throw new AccountLockedException("security.authentication.account.locked.error", entity + " is locked.");
+				throw new AccountLockedException("intl.security.authentication.account.locked.error", entity + " is locked.");
 			}
 		}
 	}

@@ -33,7 +33,7 @@ public class IPAddrAuthFailureLimiter extends AbstractAuthFailureLimiter
 			int value = faildCounter.getFailedCount();
 			if (value >= limitNumber)
 			{
-				throw new AccountLockedException("security.authentication.ip.locked.error", entity + " is locked.");
+				throw new AccountLockedException("intl.security.authentication.ip.locked.error", entity + " is locked.");
 			}
 		}
 	}

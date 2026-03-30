@@ -34,7 +34,7 @@ public class WeixinMPToken extends AuthenticationToken
 	{
 		super.validate();
 
-		Assert.notNull("code", code, "security.authentication.login.failed");
+		Assert.notNull("code", code, "intl.security.authentication.login.failed");
 	}
 
 	/**

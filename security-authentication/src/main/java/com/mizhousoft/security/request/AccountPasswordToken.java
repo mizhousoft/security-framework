@@ -38,8 +38,8 @@ public class AccountPasswordToken extends AuthenticationToken
 	{
 		super.validate();
 
-		Assert.notNull("account", account, "security.authentication.login.failed");
-		Assert.notNull("password", password, "security.authentication.login.failed");
+		Assert.notNull("account", account, "intl.security.authentication.login.failed");
+		Assert.notNull("password", password, "intl.security.authentication.login.failed");
 	}
 
 	/**

@@ -26,7 +26,7 @@ public class ErrorCodeFinderTest
 	{
 		String projectPath = "..";
 		String i18nPath = ".\\src\\main\\resources\\i18n\\security_zh_CN.txt";
-		String codePrefix = "\"security.";
+		String codePrefix = "\"intl.";
 
 		Properties prop = loadProperties(i18nPath);
 
@@ -53,7 +53,7 @@ public class ErrorCodeFinderTest
 
 						if (!prop.containsKey(key) && !missKeys.contains(key))
 						{
-							System.out.println(key);
+							System.out.println(key + "  " + file.getName());
 
 							missKeys.add(key);
 						}

@@ -38,8 +38,8 @@ public class VerificationCodeToken extends AuthenticationToken
 	{
 		super.validate();
 
-		Assert.notNull("phoneNumber", phoneNumber, "security.authentication.login.failed");
-		Assert.notNull("code", code, "security.authentication.login.failed");
+		Assert.notNull("phoneNumber", phoneNumber, "intl.security.authentication.login.failed");
+		Assert.notNull("code", code, "intl.security.authentication.login.failed");
 	}
 
 	/**
