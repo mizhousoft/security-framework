@@ -46,7 +46,7 @@ public abstract class HMACSignInterceptor implements HandlerInterceptor
 			Assert.notNull(nonce, "Missing X-Nonce header");
 
 			String signature = request.getHeader("X-Signature");
-			Assert.notNull(nonce, "Missing X-Signature header");
+			Assert.notNull(signature, "Missing X-Signature header");
 
 			// 5分钟过期
 			long requestTime = Long.parseLong(timestamp);
