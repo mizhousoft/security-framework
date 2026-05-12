@@ -125,6 +125,8 @@ public abstract class HMACSignInterceptor implements HandlerInterceptor
 
 		String plainText = String.join("_", timestamp, nonce, path, paramsStr, requestBody);
 
+		LOG.debug("Request sign string: {}", plainText);
+
 		byte[] bytes = HmacSHA256Digest.hash(secret.getBytes(CharEncoding.UTF8), plainText.getBytes(StandardCharsets.UTF_8));
 
 		return HexUtils.encodeHexString(bytes, true);
