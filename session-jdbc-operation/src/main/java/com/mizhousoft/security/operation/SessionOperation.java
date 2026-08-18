@@ -15,6 +15,14 @@ public interface SessionOperation
 	void logout(String principalName);
 
 	/**
+	 * 限制会话数
+	 * 
+	 * @param principalName
+	 * @param maxSessionsAllowed
+	 */
+	void restrictConcurrentSessions(String principalName, int maxSessionsAllowed);
+
+	/**
 	 * 异步注销
 	 * 
 	 * @param principalName
