@@ -112,8 +112,7 @@ public abstract class AuthenticationFilter extends AccessControlFilter
 		{
 			if (!isJSONRequest(request))
 			{
-				throw new UnknownAccountException(
-				        "intl.security.authentication.login.failed",
+				throw new UnknownAccountException("intl.security.authentication.login.failed",
 				        "Request header accept does not application/json.");
 			}
 
@@ -131,8 +130,7 @@ public abstract class AuthenticationFilter extends AccessControlFilter
 		}
 		catch (IOException | JSONException e)
 		{
-			throw new UnknownAccountException(
-			        "intl.security.authentication.login.failed",
+			throw new UnknownAccountException("intl.security.authentication.login.failed",
 			        "Parse request body to AuthenticationToken failed.");
 		}
 		catch (AssertionException e)
@@ -154,6 +152,9 @@ public abstract class AuthenticationFilter extends AccessControlFilter
 
 		Object locale = request.getSession().getAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME);
 
+		HttpSession sesssion = request.getSession(true);
+		int sessionTimeout = sesssion.getMaxInactiveInterval();
+
 		destroySession(request, response, true);
 
 		HttpSession session = request.getSession(true);
@@ -163,6 +164,7 @@ public abstract class AuthenticationFilter extends AccessControlFilter
 			session.setAttribute(SessionLocaleResolver.LOCALE_SESSION_ATTRIBUTE_NAME, locale);
 		}
 
+		session.setMaxInactiveInterval(sessionTimeout);
 		session.setAttribute(SecurityConstants.ACCOUNT_SESSION, accountDetails);
 
 		String indexName = principalNameProvider.getPrincipalName(request, accountDetails);
