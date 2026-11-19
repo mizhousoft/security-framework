@@ -816,7 +816,8 @@ public class JdbcIndexedSessionRepository implements
 				this.delta.merge(attributeName, DeltaValue.ADDED, (oldDeltaValue,
 						deltaValue) -> (oldDeltaValue == DeltaValue.ADDED) ? oldDeltaValue : DeltaValue.UPDATED);
 			}
-			this.delegate.setAttribute(attributeName, value(attributeValue));
+			Supplier<?> supplier = value(attributeValue);
+			this.delegate.setAttribute(attributeName, supplier);
 			if (PRINCIPAL_NAME_INDEX_NAME.equals(attributeName) || SPRING_SECURITY_CONTEXT.equals(attributeName)) {
 				this.changed = true;
 			}
@@ -969,7 +970,9 @@ public class JdbcIndexedSessionRepository implements
 				String attributeName = rs.getString("ATTRIBUTE_NAME");
 				if (attributeName != null) {
 					byte[] bytes = getLobHandler().getBlobAsBytes(rs, "ATTRIBUTE_BYTES");
-					session.delegate.setAttribute(attributeName, lazily(() -> deserialize(bytes)));
+					if (bytes != null) {
+						session.delegate.setAttribute(attributeName, lazily(() -> deserialize(bytes)));
+					}
 				}
 				sessions.add(session);
 			}
